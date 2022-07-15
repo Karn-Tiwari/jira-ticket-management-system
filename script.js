@@ -1,39 +1,108 @@
-let addBtn = document.querySelector('.add-btn');
-let modalCont = document.querySelector('.modal-cont');
-let mainCont = document.querySelector('.main-cont');
-let addFlag = false;
- addBtn.addEventListener("click", function() {
+const filterOptions = document.querySelectorAll(".filter-colors__container");
+const mainContainer = document.querySelector(".main-container");
+const modalFilters = document.querySelectorAll(".modal-filters");
+const modalContainer = document.querySelector(".modal-container");
+const addBtn = document.querySelector(".add");
+const descBox = document.querySelector(".desc-box");
 
-    // Display Modal
-    // Generate ticket
-    
-    // AddFlag, true ->Modal Display
-    // AddFlag. False -> Modal none
-    addFlag = !addFlag;
-    if(addFlag){
-      modalCont.Style.display = "flex";
-    }
-    else{
-      modalCont.style.display = "none";
-    }
-   })
+let tcolor;
+let colors = ["lightpink", "lightblue", "lightgreen", "black"];
+let cColor = colors[colors.length - 1];
+let flag = false;
 
-   modalCont.addEventListener("keydown",(e)=>{
-      let key = e.key;
-      if(key==="shift"){
-         createticket();
-      }
-   }) 
+let id = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@$~";
 
-   function createticket(){
-      let ticketCont = document.querySelector('div');
-      ticketCont.setAttribute('class', 'ticket-cont');
-      ticketCont.innerHTML= `
-      <div class="ticket-color"></div>
-            <div class="ticket-id"></div>
-            <div class="task-area">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, dolorum facere? Accusamus dolores tempore a corrupti expedita sequi!
-            </div>`;
-   
-   mainCont.appendChild(createticket());
-   }
+for (let i = 0; i < filterOptions.length; i++) {
+	filterOptions[i].addEventListener("click", function () {
+		let arr = filterOptions[i].children;
+		let classArr = arr[0].classList;
+		let filtercolor = classArr[0];
+
+		let ticketColor = document.querySelectorAll(".ticket-color");
+		let ticketcontainer = document.querySelectorAll(".ticket-container");
+
+		for (let i = 0; i < ticketColor.length; i++) {
+			if (ticketColor[i].classList[1] != filtercolor) {
+				console.log("imad");
+				ticketcontainer[i].style.display = "none";
+			} else {
+				ticketcontainer[i].style.display = "block";
+			}
+		}
+	});
+}
+
+addBtn.addEventListener("click", function () {
+	if (flag == false) {
+		modalContainer.style.display = "flex";
+	} else {
+		modalContainer.style.display = "none";
+	}
+	flag = !flag;
+});
+
+for (let i = 0; i < modalFilters.length; i++) {
+	modalFilters[i].addEventListener("click", function () {
+		modalFilters.forEach(function (modalFilter) {
+			modalFilter.classList.remove("border");
+		});
+		modalFilters[i].classList.add("border");
+		cColor = modalFilters[i].classList[1];
+	});
+}
+
+descBox.addEventListener("keydown", function (e) {
+	if (e.key == "Enter") {
+		let task = descBox.value;
+		//create ticket
+
+		createTicket(task, cColor); // create ticket
+		cColor = colors[colors.length - 1];
+		modalContainer.style.display = "none";
+		flag = false;
+		descBox.value = "";
+		tcolor = document.querySelectorAll(".ticket-color");
+		let i = tcolor.length - 1;
+		tcolor[i].addEventListener("click", function () {
+			let prevcolor = tcolor[i].classList[1];
+			tcolor[i].classList.remove(prevcolor);
+			let newcolor;
+			for (let i = 0; i < colors.length; i++) {
+				if (prevcolor == colors[i]) {
+					let j = (i + 1) % colors.length;
+					newcolor = colors[j];
+					break;
+				}
+			}
+			tcolor[i].classList.add(newcolor);
+		});
+
+		let texteditable = document.querySelectorAll(".ticket-desc");
+		texteditable[texteditable.length - 1].addEventListener(
+			"click",
+			function () {
+				texteditable[texteditable.length - 1].contentEditable = true;
+			}
+		);
+        let ticketContainer = document.querySelectorAll(".ticket-container");
+        ticketContainer[ticketContainer.length - 1].addEventListener("dblclick", function(){
+            ticketContainer[ticketContainer.length - 1].remove();
+        })
+	}
+});
+
+function createTicket(task, cColor) {
+	let result = "";
+	for (let i = 0; i < 6; i++) {
+		result += id.charAt(Math.floor(Math.random() * id.length));
+	}
+
+	let ticketContainer = document.createElement("div");
+	ticketContainer.setAttribute("class", "ticket-container");
+	ticketContainer.innerHTML = `<div class="ticket-color ${cColor}"></div>
+    <div class="ticket-subcontainer">
+        <div class="ticket-id">#${result}</div>
+        <div class="ticket-desc">${task}</div>
+    </div>`;
+	mainContainer.appendChild(ticketContainer);
+}
