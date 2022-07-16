@@ -65,3 +65,21 @@ body{
 .action-btn-cont>*:hover{
 background-color:#0a3d62 ;
 }
+
+
+.modal-cont{
+    height: 50vh;
+    width: 60vw;
+    background-color: lightseagreen;
+    position:absolute;
+    top:calc((100vh-10rem)/2);
+    left:calc((100vw-10rem)/2);
+    display: flex;
+} 
+
+.priority-colors-cont{
+    height: 10rem;
+    width:10rem;
+    background-color: lightgreen;
+ 
+}
