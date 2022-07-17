@@ -23,7 +23,7 @@ let addFlag = false;
       if(key==="shift"){
          createticket();
       }
-   })
+   }) 
 
    function createticket(){
       let ticketCont = document.querySelector('div');
